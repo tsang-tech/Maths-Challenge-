@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <style>
   body { font-family: 'Segoe UI', system-ui, sans-serif; text-align: center; background-color: #fff9c4; margin: 0; padding: 20px; touch-action: manipulation; }
-  #app { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 600px; position: relative; overflow: hidden;}
+  #app { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); min-height: 620px; position: relative; overflow: hidden;}
   .screen { display: none; }
   .active { display: block; }
   
@@ -17,9 +17,11 @@
   .main-tabs { display: flex; gap: 5px; margin-bottom: 15px; background: #fff59d; padding: 8px; border-radius: 12px; }
   .main-tab { flex: 1; padding: 10px 2px; border: none; border-radius: 8px; background: transparent; cursor: pointer; font-weight: 900; font-size: 0.95rem; color: #795548; transition: 0.2s;}
   .main-tab.active { background: #ff9800; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-  .main-view { display: none; animation: fadeIn 0.3s; }
+  .main-view { display: none; animation: fadeIn 0.3s; max-height: 440px; overflow-y: auto; padding-right: 2px;}
   .main-view.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title { font-weight: bold; margin: 12px 0 8px; color: #5d4037; text-align: left; font-size: 0.95rem; border-left: 4px solid #ff9800; padding-left: 8px; }
 
   .stats { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: bold; align-items: center; margin-top: 10px;}
   #time-container { color:#d32f2f; }
@@ -32,14 +34,15 @@
   .math-container { display: flex; justify-content: center; margin: 5px 0 15px; }
   .vertical-math { font-size: 4.5rem; font-weight: bold; text-align: right; line-height: 1.1; font-family: 'Courier New', monospace; }
   .bottom-line { border-bottom: 6px solid #333; display: block; margin-bottom: 10px; }
-  .operator { float: left; margin-right: 20px; color: #e65100; } /* 將運算符號加深顏色 */
+  .operator { float: left; margin-right: 20px; color: #e65100; }
 
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .option-btn { font-size: 2.2rem; padding: 15px; background-color: #fff; border: 3px solid #e0e0e0; border-radius: 15px; cursor: pointer; box-shadow: 0 5px 0 #eee; font-weight: bold; }
   .option-btn:active { transform: translateY(3px); box-shadow: none; }
 
-  .btn-mode { font-size: 1rem; padding: 12px; color: white; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px;}
+  .btn-mode { font-size: 0.95rem; padding: 10px; color: white; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 5px;}
   .bg-practice { background-color: #4CAF50; }
+  .bg-practice-mul { background-color: #ff7043; }
   .bg-challenge { background-color: #9c27b0; font-size: 1.1rem; padding: 15px; }
   
   .input-row { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
@@ -65,7 +68,6 @@
       #app { box-shadow: none; background: transparent; padding: 0; max-height: none; width: 100%; max-width: none;}
       body { background: white; padding: 0; }
       
-      /* 雙欄排版 */
       .random-q-list { 
           display: grid !important; 
           grid-template-columns: 1fr 1fr; 
@@ -126,11 +128,24 @@
     </div>
 
     <div id="view-practice" class="main-view">
+        <div class="section-title" id="txt-sec-addsub">加減法練習</div>
         <div class="options-grid">
             <button class="btn-mode bg-practice" onclick="prepareGame('add10')" id="txt-btn-add10">10以內加法 ➕</button>
             <button class="btn-mode bg-practice" onclick="prepareGame('sub10')" id="txt-btn-sub10">10以內減法 ➖</button>
             <button class="btn-mode bg-practice" onclick="prepareGame('add20')" id="txt-btn-add20">20以內加法 ➕</button>
             <button class="btn-mode bg-practice" onclick="prepareGame('sub20')" id="txt-btn-sub20">20以內減法 ➖</button>
+        </div>
+
+        <div class="section-title" id="txt-sec-mul">乘法表練習 (最大 × 10)</div>
+        <div class="options-grid">
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul2')" id="txt-btn-mul2">2的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul3')" id="txt-btn-mul3">3的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul4')" id="txt-btn-mul4">4的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul5')" id="txt-btn-mul5">5的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul6')" id="txt-btn-mul6">6的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul7')" id="txt-btn-mul7">7的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul8')" id="txt-btn-mul8">8的乘法 ✖️</button>
+            <button class="btn-mode bg-practice-mul" onclick="prepareGame('mul9')" id="txt-btn-mul9">9的乘法 ✖️</button>
         </div>
     </div>
     
@@ -218,8 +233,11 @@
     en: {
         title: "Mix Math Battle (+ - ×) 💩", subtitle: "30s speed & accuracy! Double points for Multiplication!",
         tabPractice: "Practice", tabChallenge: "Challenge", tabLb: "Leaderboard", tabMistakes: "Mistakes",
+        secAddSub: "Addition & Subtraction", secMul: "Times Tables (up to ×10)",
         add10: "Add (within 10) ➕", sub10: "Sub (within 10) ➖",
         add20: "Add (within 20) ➕", sub20: "Sub (within 20) ➖", 
+        mul2: "2 Times Table ✖️", mul3: "3 Times Table ✖️", mul4: "4 Times Table ✖️", mul5: "5 Times Table ✖️",
+        mul6: "6 Times Table ✖️", mul7: "7 Times Table ✖️", mul8: "8 Times Table ✖️", mul9: "9 Times Table ✖️",
         mix: "Mix Battle (+ - ×) 🔀", redo: "🚀 Start Re-do",
         clearMistakes: "🗑️ Clear All", printMistakes: "🖨️ Print Mistakes",
         printRandom: "🖨️ Print 20 Random",
@@ -230,13 +248,16 @@
     zh: {
         title: "加減乘混合大激鬥 💩", subtitle: "30秒鬥快鬥準，乘法得分雙倍！爆出最多可愛poo poo",
         tabPractice: "練習區", tabChallenge: "挑戰區", tabLb: "龍虎榜", tabMistakes: "錯題再練",
+        secAddSub: "加減法練習", secMul: "乘法表練習 (最大 × 10)",
         add10: "10以內加法 ➕", sub10: "10以內減法 ➖",
         add20: "20以內加法 ➕", sub20: "20以內減法 ➖", 
+        mul2: "2的乘法 ✖️", mul3: "3的乘法 ✖️", mul4: "4的乘法 ✖️", mul5: "5的乘法 ✖️",
+        mul6: "6的乘法 ✖️", mul7: "7的乘法 ✖️", mul8: "8的乘法 ✖️", mul9: "9的乘法 ✖️",
         mix: "加減乘大挑戰 🔀", redo: "🚀 開始再做一次",
         clearMistakes: "🗑️ 一鍵廢除所有紀錄", printMistakes: "🖨️ 列印錯題集",
         printRandom: "🖨️ 隨機20題列印",
         quest: "題數", resultTitle: "加減乘混合大激鬥", home: "返回主頁",
-        scoreLabel: "總得分", questLabel: "答對題數", wrongTitle: "⚠️ 錯題檢討：",
+        scoreLabel: "總得分", questLabel: "答對題數", wrongTitle: "⚠️️ 錯題檢討：",
         pos: ["神速！", "完美！", "做得好！"], neg: ["加油！", "再試一次！"]
     }
   };
@@ -256,6 +277,8 @@
     document.getElementById("tab-main-challenge").innerText = t.tabChallenge;
     document.getElementById("tab-main-leaderboard").innerText = t.tabLb;
     document.getElementById("tab-main-mistakes").innerText = t.tabMistakes;
+    document.getElementById("txt-sec-addsub").innerText = t.secAddSub;
+    document.getElementById("txt-sec-mul").innerText = t.secMul;
     document.getElementById("txt-btn-redo").innerText = t.redo;
     document.getElementById("txt-btn-clear").innerText = t.clearMistakes;
     document.getElementById("txt-btn-print").innerText = t.printMistakes;
@@ -264,6 +287,11 @@
     document.getElementById("txt-btn-sub10").innerText = t.sub10;
     document.getElementById("txt-btn-add20").innerText = t.add20;
     document.getElementById("txt-btn-sub20").innerText = t.sub20;
+    
+    for(let i=2; i<=9; i++) {
+        document.getElementById(`txt-btn-mul${i}`).innerText = t[`mul${i}`];
+    }
+
     document.getElementById("txt-btn-mix").innerText = t.mix;
     document.getElementById("txt-btn-home").innerText = t.home;
     document.getElementById("txt-wrong-title").innerText = t.wrongTitle;
@@ -296,7 +324,6 @@
       }
   }
 
-  // 更新隨機列印：加入乘法
   function printRandom20() {
       const container = document.getElementById("global-mistakes-list");
       const title = document.getElementById("print-title");
@@ -311,14 +338,14 @@
           else op = '×';
 
           if (op === '+') {
-              n1 = Math.floor(Math.random() * 21); // 0-20
-              n2 = Math.floor(Math.random() * 21); // 0-20
+              n1 = Math.floor(Math.random() * 21);
+              n2 = Math.floor(Math.random() * 21);
           } else if (op === '-') {
               n1 = Math.floor(Math.random() * 21);
               n2 = Math.floor(Math.random() * (n1 + 1)); 
           } else {
-              n1 = Math.floor(Math.random() * 11); // 10以內乘法
-              n2 = Math.floor(Math.random() * 11);
+              n1 = Math.floor(Math.random() * 10) + 1; // 1-10
+              n2 = Math.floor(Math.random() * 10) + 1; // 1-10
           }
           container.innerHTML += `<li><span class="q-num">${i+1}.</span><span class="q-text">${n1} ${op} ${n2} = </span><span class="print-blank" style="display:none;"></span></li>`;
       }
@@ -354,7 +381,7 @@
     generateQuestion();
   }
 
-  // 升級產生題目邏輯：加入乘法
+  // 題目生成：支援單一數字乘法 (2~9) 且最大乘以10
   function generateQuestion() {
     let n1, n2, opSign;
     if (isMistakeMode) {
@@ -364,6 +391,19 @@
         let parts = m.q.split(' ');
         n1 = parseInt(parts[0]); opSign = parts[1]; n2 = parseInt(parts[2]);
         correctAnswer = m.right;
+    } else if (gameMode.startsWith('mul')) {
+        // 單項乘法模式 (mul2 ~ mul9)
+        let baseNum = parseInt(gameMode.replace('mul', ''));
+        let otherNum = Math.floor(Math.random() * 10) + 1; // 限定 1 至 10
+        
+        // 隨機調換前後順序 (例如 5x3 或 3x5)
+        if (Math.random() < 0.5) {
+            n1 = baseNum; n2 = otherNum;
+        } else {
+            n1 = otherNum; n2 = baseNum;
+        }
+        correctAnswer = n1 * n2;
+        opSign = "×";
     } else {
         let limit = (gameMode.includes('10')) ? 10 : 20;
         let op;
@@ -374,7 +414,7 @@
             let rand = Math.random();
             if (rand < 0.33) op = 'add';
             else if (rand < 0.66) op = 'sub';
-            else op = 'mul'; // 三分之一機率出乘法
+            else op = 'mul';
         } else {
             op = 'add';
         }
@@ -386,8 +426,8 @@
             n1 = Math.floor(Math.random() * (limit + 1)); n2 = Math.floor(Math.random() * (n1 + 1));
             correctAnswer = n1 - n2; opSign = "-";
         } else if (op === 'mul') {
-            n1 = Math.floor(Math.random() * 11); // 0 到 10
-            n2 = Math.floor(Math.random() * 11); // 0 到 10
+            n1 = Math.floor(Math.random() * 10) + 1; // 1 到 10
+            n2 = Math.floor(Math.random() * 10) + 1; // 1 到 10
             correctAnswer = n1 * n2; opSign = "×";
         }
     }
@@ -396,7 +436,7 @@
     document.getElementById("op-sign").innerText = opSign;
     questionStartTime = Date.now();
     
-    // 生成選項，稍微擴大隨機範圍以免太容易猜
+    // 生成干擾選項
     let opts = [correctAnswer];
     while (opts.length < 4) {
       let w = correctAnswer + (Math.floor(Math.random() * 11) - 5);
@@ -412,7 +452,6 @@
     });
   }
 
-  // 升級計分邏輯：乘法雙倍
   function handleAnswer(selected, n1, n2, opSign, btn) {
     if(!gameActive) return;
     const fb = document.getElementById("feedback-msg");
@@ -420,7 +459,6 @@
     fb.classList.remove("pop-feedback");
     
     if (selected === correctAnswer) {
-      // 如果是乘法，得分 X 2
       let pointMultiplier = (opSign === "×") ? 2 : 1;
       let timeBonus = Math.max(1, 10 - Math.floor((Date.now() - questionStartTime) / 500));
       let earned = timeBonus * (++combo) * pointMultiplier;
@@ -428,7 +466,6 @@
       score += earned; questCount++;
       fb.innerText = i18n[currentLang].pos[Math.floor(Math.random()*3)];
       fb.style.color = "#4CAF50";
-      // 顯示雙倍提示
       sp.innerText = opSign === "×" ? `+${earned} (x2!)` : `+${earned}`; 
       sp.style.color = "#ff9800";
     } else {
